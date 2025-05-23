@@ -31,7 +31,10 @@ android {
         release {
             // Use debug signing config temporarily; replace with your own signing config for production
             signingConfig = signingConfigs.getByName("debug")
-            isMinifyEnabled = false // Enable if you want to shrink code
+
+            isMinifyEnabled = true      // Enable code shrinking (R8/ProGuard)
+            isShrinkResources = true    // Enable resource shrinking (requires minify enabled)
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -39,6 +42,8 @@ android {
         }
         debug {
             signingConfig = signingConfigs.getByName("debug")
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }
@@ -54,7 +59,7 @@ dependencies {
     // implementation("com.google.firebase:firebase-auth")
     // implementation("com.google.firebase:firebase-firestore")
 
-    // Flutter dependencies (if not already added by Flutter plugin)
+    // Kotlin standard library
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10")
 }
 
