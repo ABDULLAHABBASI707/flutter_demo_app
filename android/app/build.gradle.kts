@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-    id("dev.flutter.flutter-gradle-plugin")
+    id("com.google.gms.google-services") // Apply Google Services plugin
+    id("dev.flutter.flutter-gradle-plugin") // Flutter plugin
 }
 
 android {
@@ -20,10 +20,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.flutter_demo_app"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -32,11 +29,33 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // Use debug signing config temporarily; replace with your own signing config for production
+            signingConfig = signingConfigs.getByName("debug")
+            isMinifyEnabled = false // Enable if you want to shrink code
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        debug {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+}
+
+dependencies {
+    // Import the Firebase BoM to manage Firebase SDK versions
+    implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
+
+    // Add Firebase SDKs you want to use (no versions needed when using BoM)
+    implementation("com.google.firebase:firebase-analytics")
+
+    // Add other Firebase dependencies as needed, e.g.:
+    // implementation("com.google.firebase:firebase-auth")
+    // implementation("com.google.firebase:firebase-firestore")
+
+    // Flutter dependencies (if not already added by Flutter plugin)
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10")
 }
 
 flutter {
